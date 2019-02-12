@@ -13,6 +13,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 usernameStr = 'username'
 passwordStr = 'password'
+'''
+chrome_options = Options()  
+chrome_options.add_argument("--headless")
+driver = webdriver.Chrome(executable_path=os.path.abspath(“chromedriver"),   chrome_options=chrome_options) 
+'''
 
 browser = webdriver.Chrome()
 browser.get(('https://www.safeway.com/CMS/account/login/?FullSite=Y&goto=https:%2F%2Fwww.safeway.com%2FShopStores%2FjustforU.page'))
