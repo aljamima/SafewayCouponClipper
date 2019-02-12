@@ -1,8 +1,10 @@
 #!/usr/bin/python3
-#### You MUST Install  Selenium and a WebDriver utility. I Chose Chrome. 
-### Maybe I will create a windows installer!!!!!
-## maybe.
-#
+#### You MUST Install  Selenium(`pip install selenium`)
+### and a WebDriver utility('http://chromedriver.chromium.org/downloads'). I Chose Chrome. 
+## Maybe I will create a windows installer!!!!!
+# maybe.
+######## JavaScript snippet borrowed from "https://github.com/kton/Safeway-Just-for-u"
+
 import js2py
 import time
 from selenium import webdriver
