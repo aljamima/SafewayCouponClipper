@@ -13,8 +13,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 
-usernameStr = 'shawnmullaney@hotmail.com'
-passwordStr = 'poopoo11'
+usernameStr = 'email'
+passwordStr = 'password'
 ##
 chrome_options = Options()  
 chrome_options.add_argument("--headless")
