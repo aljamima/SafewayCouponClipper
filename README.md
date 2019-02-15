@@ -5,6 +5,7 @@ You will need to install chromeDriver to use this, or  change the code to repres
 Executable installers available: 'http://chromedriver.chromium.org/downloads'
 
 You will also need to install Selenium. This is available thru pip: `pip install selenium`
+You also need to install js2py: `pip install js2y`
 
 Use this app with a scheduler such as 'cron', and NEVER worry about coupons again! Just go to the store and save ALL the moneys!
 
