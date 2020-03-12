@@ -19,7 +19,7 @@ from selenium.common.exceptions import WebDriverException
 
 
 usernameStr = 'shawnmullaney@hotmail.com'
-passwordStr = 'poopoo11'
+passwordStr = 'password'
 ##
 chrome_options = Options()  
 #chrome_options.add_argument("--headless")
