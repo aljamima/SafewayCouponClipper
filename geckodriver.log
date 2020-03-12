@@ -1,0 +1,14 @@
+1583953456226	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileiGIZcp"
+1583953456761	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
+1583953457549	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1583953457549	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1583953457549	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1583953457550	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+Sandbox: seccomp sandbox violation: pid 49058, tid 49058, syscall 315, args 49058 139661521364928 56 0 139661516221888 139661521364928.
+Sandbox: seccomp sandbox violation: pid 49175, tid 49175, syscall 315, args 49175 140341905610752 56 0 140341905706240 140341905610752.
+1583953460756	Marionette	INFO	Listening on port 44365
+1583953460844	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+Sandbox: seccomp sandbox violation: pid 49251, tid 49251, syscall 315, args 49251 139766581675904 56 0 139766586373792 139766581675904.
+Sandbox: seccomp sandbox violation: pid 49298, tid 49298, syscall 315, args 49298 139941729506944 56 0 139941733144032 139941729506944.
+1583953469744	Marionette	INFO	Stopped listening on port 44365
