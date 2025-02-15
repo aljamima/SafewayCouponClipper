@@ -1,7 +1,8 @@
 # SafewayCouponClipper
 Automated coupon clipper for safeway's online deals. 
 
-**NEW** We Now have a Windows Installer!!! Still need to improve it and tweak some details. This is my first windows app...
+## NEW 
+We Now have a Windows Installer!!! Still need to improve it and tweak some details. This is my first windows app...
 You will need to install chromeDriver to use this, or  change the code to represent the webdriver browser you are using.
 Executable installers available: 'http://chromedriver.chromium.org/downloads'
 
