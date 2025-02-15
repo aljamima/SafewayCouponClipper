@@ -18,7 +18,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import WebDriverException
 
 
-usernameStr = 'shawnmullaney@hotmail.com'
+usernameStr = 'email'
 passwordStr = 'password'
 ##
 chrome_options = Options()  
