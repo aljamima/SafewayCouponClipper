@@ -1,0 +1,128 @@
+void (async () => {
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const log = (...a) => console.log("[Safeway Clip]", ...a);
+
+  // Return a flat array of nodes under root, recursing into shadow roots
+  function allNodes(root = document) {
+    const out = [];
+    const walker = document.createTreeWalker(root instanceof Document ? root : root.ownerDocument, NodeFilter.SHOW_ELEMENT);
+    // Custom traversal to include shadow DOM
+    function pushDeep(node) {
+      out.push(node);
+      // Shadow DOM
+      if (node.shadowRoot) {
+        for (const el of node.shadowRoot.querySelectorAll("*")) pushDeep(el);
+      }
+    }
+    // Top-level
+    for (const el of (root.querySelectorAll ? root.querySelectorAll("*") : [])) pushDeep(el);
+    return out;
+  }
+
+  const isVisible = el => {
+    try {
+      const r = el.getBoundingClientRect();
+      const styles = getComputedStyle(el);
+      return r.width > 0 && r.height > 0 && styles.visibility !== "hidden" && styles.display !== "none";
+    } catch { return false; }
+  };
+
+  const looksLikeClip = el => {
+    const txt = (el.textContent || "").trim().toLowerCase();
+    const al  = (el.getAttribute?.("aria-label") || "").toLowerCase();
+    const name = (el.getAttribute?.("name") || "").toLowerCase();
+    const cls = (el.className || "").toLowerCase();
+    const id  = (el.id || "").toLowerCase();
+    // Broad net: clip/add + coupon/deal; allow “add” alone too
+    return (
+      /(clip|add)\s*(coupon|deal)?/.test(txt) ||
+      /(clip|add)\b/.test(al) ||
+      /(clip|add)/.test(name) ||
+      /(clip|add)/.test(cls) ||
+      /(clip|add)/.test(id)
+    );
+  };
+
+  async function robustClick(el) {
+    // Try direct click
+    try { el.click(); await sleep(50); } catch {}
+    // Try click on a likely child that has the handler
+    const inner = el.querySelector?.("button, div, span, a") || null;
+    if (inner && inner !== el) { try { inner.click(); await sleep(50); } catch {} }
+    // Try synthetic event (bubbled)
+    const target = inner || el;
+    try {
+      const ev = new MouseEvent("click", { bubbles: true, cancelable: true, view: window });
+      target.dispatchEvent(ev);
+      await sleep(50);
+    } catch {}
+  }
+
+  async function clickAllVisibleClips() {
+    const nodes = allNodes(document);
+    // Prefer “real” buttons/anchors first
+    const buttons = nodes.filter(n =>
+      (n.tagName === "BUTTON" || (n.tagName === "A" && n.getAttribute("role") === "button")) &&
+      looksLikeClip(n) && isVisible(n)
+    );
+    const spansDivs = nodes.filter(n =>
+      (n.tagName === "DIV" || n.tagName === "SPAN") &&
+      looksLikeClip(n) && isVisible(n)
+    );
+
+    let clicks = 0;
+
+    // De-dup: avoid duplicates that are parents/children of the same control
+    const seen = new WeakSet();
+    const candidates = [...buttons, ...spansDivs].filter(n => {
+      if (seen.has(n)) return false;
+      seen.add(n);
+      return true;
+    });
+
+    for (const n of candidates) {
+      const before = performance.now();
+      await robustClick(n);
+      const after = performance.now();
+      // Heuristic: count as a click attempt if we spent time on it and it was visible
+      clicks += 1;
+      // Small paced delay; tune if rate-limited
+      await sleep(180);
+    }
+    return clicks;
+  }
+
+  async function clickLoadMoreIfAny() {
+    const nodes = allNodes(document);
+    const lm = nodes.find(n => {
+      const txt = (n.textContent || "").toLowerCase();
+      const al  = (n.getAttribute?.("aria-label") || "").toLowerCase();
+      return (n.tagName === "BUTTON" || n.getAttribute?.("role") === "button") &&
+             isVisible(n) &&
+             (/load\s*more|show\s*more|more deals|see more/i.test(txt) || /load|more/i.test(al));
+    });
+    if (lm) { await robustClick(lm); await sleep(1200); return true; }
+    return false;
+  }
+
+  log("Starting…");
+  let total = 0, stable = 0, prevH = -1;
+
+  for (let cycle = 1; cycle <= 80; cycle++) {
+    const clicked = await clickAllVisibleClips();
+    total += clicked;
+    log(`Cycle ${cycle}: attempted ${clicked} (running total ${total})`);
+
+    const more = await clickLoadMoreIfAny();
+    // Scroll to trigger lazy load as well
+    window.scrollTo(0, document.body.scrollHeight);
+    await sleep(1200);
+
+    const h = document.body.scrollHeight;
+    stable = (h === prevH) ? (stable + 1) : 0;
+    prevH = h;
+
+    if (!more && stable >= 3) break;
+  }
+  log(`Done. Attempted to clip ~${total} items. If you still see unclipped cards, scroll up/down once and re-run.`);
+})();
